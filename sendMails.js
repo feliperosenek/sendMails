@@ -40,8 +40,19 @@
             .catch((error) => {
               console.error(error)
             })
-            var timestamp = new Date().getTime();
-       await sequelize.query("UPDATE facebook SET atualizado=5 && data="+ timestamp +" WHERE id=" + getEmail[x].id + "")
+            var timestamp = new Date();
+            var ano = timestamp.getFullYear();
+            var mes = timestamp.getMonth();
+            var dia = timestamp.getDate();
+            var hora = timestamp.getHours()
+            var minuto = timestamp.getMinutes()
+
+            if(mes <= 9){mes = mes+1; mes = "0"+mes}
+            if(hora <=9){hora="0"+hora}
+            if(minuto <=9){minuto="0"+minuto}
+            var date = ano +"-"+mes+"-"+dia+" "+hora+":"+minuto;
+
+       await sequelize.query("UPDATE facebook SET atualizado=5 && data='"+ date +"' WHERE id=" + getEmail[x].id + "")
 
           await delay(7000)
 
