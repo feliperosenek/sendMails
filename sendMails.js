@@ -20,7 +20,7 @@
 
       try {
 
-        var getEmail = await sequelize.query("SELECT id,email FROM facebook WHERE atualizado=3 ORDER BY rand()", {
+        var getEmail = await sequelize.query("SELECT id,email FROM facebook WHERE atualizado=3 && valido=3 ORDER BY rand()", {
           type: QueryTypes.SELECT
         })
 
