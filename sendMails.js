@@ -53,7 +53,7 @@
             var date = ano +"-"+mes+"-"+dia+" "+hora+":"+minuto;
 
        await sequelize.query("UPDATE facebook SET atualizado=5 WHERE id=" + getEmail[x].id + "")
-       await sequelize.query("UPDATE facebook SET  data="+ date +" WHERE id=" + getEmail[x].id + "")     
+       await sequelize.query("UPDATE facebook SET  data='"+ date +"' WHERE id=" + getEmail[x].id + "")     
           await delay(7000)
 
         }
