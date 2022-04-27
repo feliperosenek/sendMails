@@ -11,9 +11,11 @@
     "minimist": "^1.2.6",
     "mysql2": "^2.3.3",
     "node-email-validator": "^1.1.1",
+    "nodemon": "^2.0.15",
     "sequelize": "^6.17.0"
   },
   "scripts": {
-    "start": "nodemon server.js"
+    "server": "nodemon server.js",
+    "sendMail": "node sendMails.js"
   }
 }
