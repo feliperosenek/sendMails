@@ -55,7 +55,9 @@
             if(minuto <=9){minuto="0"+minuto}
             var date = ano +"-"+mes+"-"+dia+" "+hora+":"+minuto;
 
-        sequelize.query("UPDATE facebook SET atualizado=5, status='" + status + "', data='" + date + "',  WHERE email='" + email + "'")
+        sequelize.query("UPDATE facebook SET atualizado=5 WHERE email='" + email + "'");
+        sequelize.query("UPDATE facebook SET status='" + status + "' WHERE email='" + email + "'");
+        sequelize.query("UPDATE facebook SET data='" + date + "' WHERE email='" + email + "'")
       }
     });
   }

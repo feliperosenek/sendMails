@@ -31,7 +31,8 @@ var timestamp = new Date();
 
 app.post('/', function (req, res) {
   console.log(req.body[0].email +" - "+ req.body[0].event)
-  sequelize.query("UPDATE facebook SET data='" + date + "', status='" + req.body[0].event + "' WHERE email='" + req.body[0].email + "'")
+  sequelize.query("UPDATE facebook SET data='" + date + "' WHERE email='" + req.body[0].email + "'")
+  sequelize.query("UPDATE facebook SET  status='" + req.body[0].event + "' WHERE email='" + req.body[0].email + "'")
   res.status(200).end() 
 });
 
