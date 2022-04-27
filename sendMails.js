@@ -20,7 +20,7 @@
 
       try {
 
-        var getEmail = await sequelize.query("SELECT id,email FROM facebook WHERE atualizado=1 ORDER BY rand()", {
+        var getEmail = await sequelize.query("SELECT id,email FROM facebook WHERE atualizado=3 ORDER BY rand()", {
           type: QueryTypes.SELECT
         })
 
@@ -41,7 +41,7 @@
               console.error(error)
             })
             var timestamp = new Date().getTime();
-       await sequelize.query("UPDATE facebook SET atualizado=3 && data="+ timestamp +" WHERE id=" + getEmail[x].id + "")
+       await sequelize.query("UPDATE facebook SET atualizado=5 && data="+ timestamp +" WHERE id=" + getEmail[x].id + "")
 
           await delay(7000)
 
