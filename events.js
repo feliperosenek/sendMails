@@ -1,63 +1,92 @@
-  const EventSource = require('eventsource');
-  var jsonToArray = require('json-value-to-array');
-  const Sequelize = require('sequelize');
-  const {
-    QueryTypes
-  } = require('sequelize');
-  const sequelize = new Sequelize("eduard72_emailmkt", "eduard72_wp625", "37@S0DSm(p", {
-    host: 'sh-pro20.hostgator.com.br',
-    dialect: "mysql",
-    define: {
-      freezeTableName: true,
-      timestamps: false,
+const EventSource = require('eventsource');
+var nev = require('node-email-validator');
+var jsonToArray = require('json-value-to-array');
+const Sequelize = require('sequelize');
+const {
+  QueryTypes
+} = require('sequelize');
+const sequelize = new Sequelize("eduard72_emailmkt", "eduard72_wp625", "37@S0DSm(p", {
+  host: 'sh-pro20.hostgator.com.br',
+  dialect: "mysql",
+  define: {
+    freezeTableName: true,
+    timestamps: false,
+  },
+  connectionTimeout: 0,
+    pool:{
+      max: 100,
+      min: 0,
+      idle: 200000,
+      acquire: 200000
     },
-    connectionTimeout: 0,
-      pool:{
-        max: 6,
-        min: 1,
-        idle: 200000,
-        acquire: 200000
-      },
-    logging: false
-  });
+  logging: false
+});
 
-  const eventSourceInit = {
-    headers: {
-      "Authorization": "Bearer a905d915f7d2ad37449fdfc1b285884c",
-    }
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+var valida = 0
+var emailValido = []
+var emails = []
+
+const eventSourceInit = {
+  headers: {
+    "Authorization": "Bearer a905d915f7d2ad37449fdfc1b285884c",
   }
-  const es = new EventSource("https://api.pipedream.com/sources/dc_Zdu4bYy/sse", eventSourceInit);
+}
+const es = new EventSource("https://api.pipedream.com/sources/dc_MDuk7Ym/sse", eventSourceInit);
 
-  console.log("Listening to SSE stream at https://api.pipedream.com/sources/dc_Zdu4bYy/sse\n");
+console.log("Listening to SSE stream at https://api.pipedream.com/sources/dc_MDuk7Ym/sse\n");
 
-  es.onmessage = event => {
-    const json = JSON.parse(event.data);
+es.onmessage = event => {
+  const json = JSON.parse(event.data);
 
-    jsonToArray.jsonToArray(json.event, function(result) {
-      for (x = 0; x < result.length; x++) {
-      //  console.log(result[x]);
-        var email = result[x][0];
-        var status = result[x][1];
+  var reqButton = json.event;
 
-        console.log(status + " - " + email);
-        console.log(result[x][2]);
-        console.log(" ");
+  console.log(reqButton)
 
-        var timestamp = new Date();
-            var ano = timestamp.getFullYear();
-            var mes = timestamp.getMonth();
-            var dia = timestamp.getDate();
-            var hora = timestamp.getHours()
-            var minuto = timestamp.getMinutes()
+  if(reqButton.flag == 1 && reqButton.process == "validateMail"){
+    validateMail();
+  }  
 
-            if(mes <= 9){mes = mes+1; mes = "0"+mes}
-            if(hora <=9){hora="0"+hora}
-            if(minuto <=9){minuto="0"+minuto}
-            var date = ano +"-"+mes+"-"+dia+" "+hora+":"+minuto;
+  async function validateMail(){
 
-        sequelize.query("UPDATE facebook SET atualizado=5 WHERE email='" + email + "'");
-        sequelize.query("UPDATE facebook SET status='" + status + "' WHERE email='" + email + "'");
-        sequelize.query("UPDATE facebook SET data='" + date + "' WHERE email='" + email + "'")
-      }
-    });
+  var getEmails = await sequelize.query("SELECT id, email FROM facebook WHERE atualizado=3 && valido=0 ORDER BY rand()", {
+    type: QueryTypes.SELECT
+  })
+
+  for (var x = 0; x < getEmails.length; x++) {
+
+    var getMail = await sequelize.query("SELECT id, email FROM facebook WHERE id='" + getEmails[x].id + "'", {
+      type: QueryTypes.SELECT
+    })
+
+    setMail = getMail[0].email;
+    idMail = getMail[0].id;     
+
+    nev(setMail).then(
+      validation => {
+        if (!validation.mxRecords || !validation.isEmailValid) {
+          valida = 1
+        } else {
+          valida = 3
+        }
+        console.log(setMail + ":" + valida)
+        sequelize.query("UPDATE facebook SET atualizado=4 WHERE id=" + idMail + "")
+        sequelize.query("UPDATE facebook SET valido='" + valida + "' WHERE id=" + idMail + "")
+      }).catch(error => console.log(error));
+    valida = 0;
+    await delay(1000)
   }
+}
+
+}
+
+
+
+
+
+
+   
+
+  
+
