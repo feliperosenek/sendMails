@@ -1,7 +1,5 @@
   const Sequelize = require('sequelize');
-  const {
-    QueryTypes
-  } = require('sequelize');
+  const {QueryTypes} = require('sequelize');
   const sequelize = new Sequelize("eduard72_emailmkt", "eduard72_wp625", "37@S0DSm(p", {
     host: 'sh-pro20.hostgator.com.br',
     dialect: "mysql",
@@ -19,7 +17,6 @@
  async function sendEmail() {
 
       try {
-
         var getEmail = await sequelize.query("SELECT id,email FROM facebook WHERE atualizado=4 && valido=3 ORDER BY rand()", {
           type: QueryTypes.SELECT
         })
