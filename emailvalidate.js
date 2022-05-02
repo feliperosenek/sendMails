@@ -35,7 +35,7 @@ const eventSourceInit = {
 }
 const es = new EventSource("https://api.pipedream.com/sources/dc_MDuk7Ym/sse", eventSourceInit);
 
-console.log("Listening to SSE stream at https://api.pipedream.com/sources/dc_MDuk7Ym/sse\n");
+console.log("LISTEN emailValidate - Pipedream - dc_MDuk7Ym/sse");
 
 es.onmessage = event => {
   const json = JSON.parse(event.data);
