@@ -1,6 +1,5 @@
 const EventSource = require('eventsource');
 var nev = require('node-email-validator');
-var jsonToArray = require('json-value-to-array');
 const Sequelize = require('sequelize');
 const {
   QueryTypes
