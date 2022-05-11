@@ -42,7 +42,7 @@ var nev = require('node-email-validator');
     }
 
   }  
-  sendEmail();
+
  async function sendEmail() {
 
       try {
