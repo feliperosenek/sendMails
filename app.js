@@ -9,7 +9,7 @@ var nev = require('node-email-validator');
       freezeTableName: true,
       timestamps: false,
     },
-    logging: false
+    logging: false,
   });
   require('dotenv').config();
   const sgMail = require('@sendgrid/mail')
