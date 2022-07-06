@@ -1,7 +1,7 @@
 const EventSource = require('eventsource');
 var nev = require('node-email-validator');
 const Sequelize = require('sequelize');
-const { QueryTypes } = require('sequelize');
+const { QueryTypes, EmptyResultError } = require('sequelize');
 const minimist = require('minimist');
 const params = minimist(process.argv.slice(2))
 const sequelize = new Sequelize("eduard72_emailmkt", "eduard72_wp625", "37@S0DSm(p", {
@@ -27,11 +27,26 @@ const es = new EventSource("https://api.pipedream.com/sources/dc_Zdu4zyE/sse", e
 
 console.log("LISTEN sendMails - Pipedream - dc_Zdu4zyE/sse");
 
+var stopmail = 0
+
 es.onmessage = event => {
   const json = JSON.parse(event.data);
-  sendEmail();
+
+  if(json.event.code == "sendMails"){
+    sendEmail();
+    stopmail=0
+  }
+  if(json.event.code == "stopMails"){
+     stop();
+  }
+ 
 }
 
+async function stop(){
+  console.log("Envio encerrado");
+  stopmail=1;
+
+}
 
 async function sendEmail() {
 
@@ -42,6 +57,11 @@ async function sendEmail() {
 
     for (var x = 0; x < getEmails.length; x++) {
 
+      if(stopmail == 1){
+        break;
+      }
+      
+      
       var getEmail = await sequelize.query("SELECT id, email FROM emails WHERE status ='' ORDER BY rand() LIMIT 1", {
         type: QueryTypes.SELECT
       })
