@@ -20,13 +20,12 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 const eventSourceInit = {
   headers: {
-    "Authorization": "Bearer a905d915f7d2ad37449fdfc1b285884c",
+    "Authorization": "Bearer 8f10d4830abeed44e700fc6992cb3024",
   }
 }
-const es = new EventSource("https://api.pipedream.com/sources/dc_MDuk7Ym/sse", eventSourceInit);
+const es = new EventSource("https://api.pipedream.com/sources/dc_Zdu4zyE/sse", eventSourceInit);
 
-console.log("LISTEN emailValidate - Pipedream - dc_MDuk7Ym/sse");
-console.log("LISTEN sendMails - Pipedream - dc_MDuk7Ym/sse");
+console.log("LISTEN sendMails - Pipedream - dc_Zdu4zyE/sse");
 
 es.onmessage = event => {
   const json = JSON.parse(event.data);
