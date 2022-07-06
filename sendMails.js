@@ -78,7 +78,7 @@ async function sendEmail() {
 
       await sequelize.query("UPDATE emails SET atualizado=3 WHERE id=" + idEmail + "")
       await sequelize.query("UPDATE emails SET  data='" + date + "' WHERE id=" + idEmail + "")
-      await delay(8000)
+      await delay(9000)
 
     }
   } catch (error) {
